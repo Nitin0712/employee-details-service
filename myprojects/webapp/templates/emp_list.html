@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static '/style.css' %}"/>
+    <title>Title</title>
+    <style>
+        .form-edit{
+            display: block;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            width: 145px;
+        }
+    </style>
+</head>
+    <div class="row" style="width:100%">
+        <div class="col-md-7 my-list">
+            <h2 style="text-align:center;font-weight:bold">Employee List</h2>
+            <table class="table table-striped">
+            <thead>
+                <tr>
+                    {% if edit != "1" %}
+                        <th>Employee ID</th>
+                    {% endif %}
+                    <th>Employee Name</th>
+                    <th>Employee Email</th>
+                    <th>Employee Contact</th>
+                    <th>Employee Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                    <tr>
+                        <td>{{ employee.id }}</td>
+                        <td>{% if edit == 1 %}<input type="text" class="form-control" name="emp_name" value="{{ employee.emp_name }}">{% endif %}{{ employee.emp_name }}</td>
+                        <td>{{ employee.emp_email }}</td>
+                        <td>{{ employee.emp_contact }}</td>
+                        <td>{{ employee.emp_address }}</td>
+                        <td><a href="/edit/{{ employee.id }}"><i class="fa fa-pencil-square-o" aria-hidden="true" style="margin-right:10px;font-size:20px"></i></a><a href="/delete/{{ employee.id }}"><i class="fa fa-trash" aria-hidden="true" style="font-size:20px"></i></a></td>
+                    </tr>
+                {% endfor %}
+                {% if edit == "1" %}
+                     <tr>
+                         <form class="form-inline" method="POST" action="/update/{{ employee.id }}" style="margin-left: 100px;">
+                              {% csrf_token %}
+                            <td><input type="text" class="form-edit" name="emp_name" value="{{ employee.emp_name }}"></td>
+                            <td><input type="text" class="form-edit" name="emp_email" value="{{ employee.emp_email }}"></td>
+                            <td><input type="text" class="form-edit" name="emp_contact" value="{{ employee.emp_contact }}"></td>
+                            <td><input type="text" class="form-edit" name="emp_address" value="{{ employee.emp_address }}"></td>
+                            <td>
+                                <button type="submit" class="btn btn-default" style="margin:0">Submit</button>
+                                <button href="show" class="btn btn-default" style="margin:0">Cancel</button>
+                            </td>
+                         </form>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        </div>
+
+        <div class="col-md-4 my-form" align="left">
+            <h2 style="text-align:center;font-weight:bold">Employee Sign Up Form</h2>
+            <form class="form-inline" method="POST" action="emp" style="margin-left: 100px;">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="sr-only" for="email">Employee Name:</label>
+                    <input type="text" class="form-control" id="emp_name" placeholder="Enter Your Name"  name="emp_name">
+                </div> <br/>
+                <div class="form-group">
+                    <label class="sr-only" for="email">Employee Email:</label>
+                    <input type="email" class="form-control" id="emp_email" placeholder="Enter Your Email"  name="emp_email">
+                </div><br/>
+                <div class="form-group">
+                    <label class="sr-only" for="email">Employee Name:</label>
+                    <input type="text" class="form-control" id="emp_contact" placeholder="Enter Your Contact No."  name="emp_contact">
+                </div><br/>
+                <div class="form-group">
+                    <label class="sr-only" for="email">Employee Name:</label>
+                    <textarea class="form-control" id="emp_address" placeholder="Enter Your Address"  name="emp_address"></textarea>
+                </div><br/>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
